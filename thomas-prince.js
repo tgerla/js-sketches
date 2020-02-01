@@ -3,22 +3,7 @@ const canvasSketch = require("canvas-sketch");
 var gradient = require("gradient-parser");
 
 var obj = gradient.parse(
-  `linear-gradient(
-    0deg,
-    rgb(  4, 39,  9)   0.000%,
-    rgb( 24, 94, 42)   5.000%,
-    rgb( 89,140, 74)  11.010%,
-    rgb( 93, 62,106)  23.000%,
-    rgb(114, 92,131)  31.010%,
-    rgb( 40, 67,114)  37.990%,
-    rgb(113,156,191)  46.000%,
-    rgb( 42,113,145)  53.000%,
-    rgb(159,187,209)  60.010%,
-    rgb(147, 99,123)  71.000%,
-    rgb(217,234,242)  84.010%,
-    rgb(223,142,159)  92.990%,
-    rgb(144, 29, 62) 100.000%
-    )`
+  `linear-gradient(90deg, rgba(215,213,68,1) 0%, rgba(255,255,255,1) 15%, rgba(0,212,255,1) 47%, rgba(0,81,97,1) 100%)`
 );
 
 const gradientArray = obj[0].colorStops.map(colorStop => {
@@ -33,7 +18,7 @@ const gradientArray = obj[0].colorStops.map(colorStop => {
 });
 
 const settings = {
-  dimensions: [4096, 4096]
+  dimensions: [2048, 2048]
 };
 
 const sketch = () => {
@@ -42,20 +27,20 @@ const sketch = () => {
     context.fillRect(0, 0, width, height);
 
     let mainRadius = width * 2;
-    let sectionRadius = 128;
+    let sectionRadius = 64;
     let centerX = width / 2;
     let centerY = width / 2;
-    let segmentWidth = 128;
-    let segmentRandomness = 0.1; // percent of segment width to randomize
+    let segmentWidth = 64;
+    let segmentRandomness = 0.5; // percent of segment width to randomize
+    let chanceOfColor = 0.005;
 
     context.strokeStyle = "#333333";
     context.lineWidth = 4;
 
     var gradient = tinygradient(gradientArray);
-    var rgb = gradient.rgb(100);
+    var rgb = gradient.rgb(50);
 
     for (let radius = mainRadius; radius > 32; radius -= sectionRadius) {
-      // ; + random(-32, 32)) {
       // around the ring
       let segmentLength = segmentWidth / radius;
 
@@ -75,7 +60,7 @@ const sketch = () => {
       );
 
       for (let segment = 0; segment < segments; segment++) {
-        if (colorCounter == 0 && Math.random() > 0.8) {
+        if (colorCounter == 0 && Math.random() > 1 - chanceOfColor) {
           colorOffset = rangeFloor(-100, 100);
           colorCounter = rangeFloor(5, 10);
         }
