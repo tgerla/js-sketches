@@ -31,7 +31,7 @@ const sketch = () => {
     let centerX = width / 2;
     let centerY = width / 2;
     let segmentWidth = 64;
-    let segmentRandomness = 0.5; // percent of segment width to randomize
+    let segmentRandomness = 0.75; // percent of segment width to randomize
     let chanceOfColor = 0.005;
 
     context.strokeStyle = "#333333";
