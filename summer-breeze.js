@@ -23,10 +23,11 @@ const settings = {
 
 // Art controls
 const sections = 32;
-const perturbation = 8;
-const radiansPerSection = (Math.PI * 2) / sections;
+const perturbation = 12;
 const gridSize = 64;
-const chanceOfColor = 0.1;
+const chanceOfColor = 0.01;
+
+const radiansPerSection = (Math.PI * 2) / sections;
 
 const sketch = () => {
   return ({ context, width, height }) => {
@@ -38,22 +39,21 @@ const sketch = () => {
 
     context.strokeStyle = "black";
     context.lineWidth = 3;
+    context.lineJoin = "miter";
 
     var locs = [];
 
-    for (let x = 0; x < width / gridSize + 1; x++) {
-      for (let y = 0; y < height / gridSize + 1; y++) {
+    for (let y = 0; y < height / gridSize + 1; y++) {
+      for (let x = 0; x < width / gridSize + 1; x++) {
         locs.push([x, y]);
       }
     }
-    shuffle(locs);
+    //shuffle(locs);
     console.log(locs);
 
     let colorOffset = 0;
     let colorCounter = 0;
     let colorIdx = 0;
-
-    colorIdx = rangeFloor(0, rgb.length);
 
     locs.forEach(([x, y]) => {
       if (colorCounter == 0 && Math.random() > 1 - chanceOfColor) {
@@ -64,11 +64,11 @@ const sketch = () => {
         context.fillStyle = wrap(rgb, x + colorOffset);
         colorCounter--;
       } else {
-        colorIdx = Math.floor(((height - y * gridSize) / height) * rgb.length);
+        colorIdx = Math.floor(((y * gridSize) / height) * rgb.length);
+        console.log(x, y, colorIdx);
 
-        context.fillStyle = rgb[colorIdx + rangeFloor(-3, 3)];
+        context.fillStyle = rgb[clamp(colorIdx, 0, rgb.length)];
       }
-      console.log(context.fillStyle);
       segment(
         context,
         x * gridSize + rangeFloor(-32, 32),
@@ -128,7 +128,7 @@ function pick(array) {
 
 function wrap(array, index) {
   if (index < 0) return index + array.length;
-  if (index > array.length) return array[index - array.length];
+  if (index > array.length - 1) return array[index - array.length];
   else return array[index];
 }
 
