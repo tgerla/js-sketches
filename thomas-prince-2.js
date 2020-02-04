@@ -103,7 +103,7 @@ const sketch = () => {
 
           colorIdx = Math.floor(((height - loc[1]) / height) * rgb.length);
 
-          context.fillStyle = rgb[colorIdx];
+          context.fillStyle = rgb[colorIdx + rangeFloor(-3, 3)];
         }
 
         outerAngle2 += segmentLength;
